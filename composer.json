@@ -1,0 +1,21 @@
+{
+    "name": "kyojin/mvc_workshop",
+    "autoload": {
+        "psr-4": {
+            "App\\": "App/"
+        },
+        "files": [
+            "App/Helpers/dd.php",
+            "App/Config/Config.php",
+        ]
+    },
+    "authors": [
+        {
+            "name": "tahajaiti",
+            "email": "kyojin.rar@gmail.com"
+        }
+    ],
+    "require": {
+      "ext-pdo": "*"
+    }
+}

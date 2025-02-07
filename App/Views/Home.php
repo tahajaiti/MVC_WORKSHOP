@@ -12,7 +12,7 @@
         }
 
         if (isset($_SESSION['user_name'])) {
-            echo 'welcome ' . $_SESSION['user_name'];
+            echo 'welcome' . $_SESSION['user_name'];
         }
     ?>
 

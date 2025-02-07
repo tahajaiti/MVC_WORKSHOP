@@ -64,4 +64,34 @@ class User
         return password_verify($password, $this->password);
     }
 
+    public function save(): bool {
+        $hashPass = password_hash($this->password, PASSWORD_BCRYPT);
+
+        $sql = "INSERT INTO users (name, email, password) VALUES (:name, :email, :password)";
+        $stmt = $this->db->prepare($sql);
+        $result = $stmt->execute([
+            'name' => $this->name,
+            'email' => $this->email,
+            'password' => $hashPass
+        ]);
+
+        if ($result) {
+            return true;
+        }
+        return false;
+    }
+
+    public function getByEmail(): ?User{
+        $sql = "SELECT * FROM users WHERE email = :email";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(['email' => $this->email]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($result){
+            $result = new User($result['name'], $result['email'], $result['password'], $result['id']);
+        }
+
+        return $result ?: null;
+    }
+
 }

@@ -8,31 +8,34 @@ class Router
 
     private string $namespace;
 
-    public function __construct() {
-        $this->namespace = 'App\\Controllers\\';
+    public function __construct()
+    {
+        $this->namespace = 'App\Controllers\\';
     }
 
-    public function add (string $method, string $path, string $handler){
+    public function add($method, $path, $handler): void
+    {
         $this->routes[$method][$path] = $handler;
     }
 
-    public function dispatch(){
+    public function dispatch(): void {
         $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         $method = $_SERVER['REQUEST_METHOD'];
 
-        $route = $this->routes[$method][$uri];
+        if (isset($this->routes[$method][$uri])) {
+            $handler = $this->routes[$method][$uri];
+            [$controller, $action] = explode('@', $handler);
 
-        if (isset($route)){
-            [$controller, $action] = explode('@', $route);
-            
             $controller = $this->namespace . $controller;
 
             if (class_exists($controller) && method_exists($controller, $action)){
                 $controller = new $controller();
                 $controller->$action();
+            } else {
+                echo "Invalid controller or action";
             }
+        } else {
+            echo "404";
         }
-        
     }
-    
 }
